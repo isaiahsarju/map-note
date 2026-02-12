@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"id": "sample-plugin",
 	"name": "Sample Plugin",
 	"version": "1.0.0",
@@ -7,5 +8,15 @@
 	"author": "Obsidian",
 	"authorUrl": "https://obsidian.md",
 	"fundingUrl": "https://obsidian.md/pricing",
+=======
+	"id": "map-location",
+	"name": "Map Location",
+	"version": "0.1.1",
+	"minAppVersion": "0.15.0",
+	"description": "Creates notes that can be displayed by the Obsidian Map API plugin",
+	"author": "Isaiah Sarju",
+	"authorUrl": "https://github.com/isaiahsarju/",
+	"fundingUrl": "https://buymeacoffee.com/isaiahsarju",
+>>>>>>> initial_edits
 	"isDesktopOnly": false
 }
