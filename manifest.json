@@ -1,14 +1,4 @@
 {
-<<<<<<< HEAD
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
-	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
-=======
 	"id": "map-location",
 	"name": "Map Location",
 	"version": "0.1.1",
@@ -17,6 +7,5 @@
 	"author": "Isaiah Sarju",
 	"authorUrl": "https://github.com/isaiahsarju/",
 	"fundingUrl": "https://buymeacoffee.com/isaiahsarju",
->>>>>>> initial_edits
 	"isDesktopOnly": false
 }

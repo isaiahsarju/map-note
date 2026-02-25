@@ -1,7 +1,6 @@
 import type { ButtonComponent } from 'obsidian';
 import { Modal, Notice, Setting, TextComponent} from 'obsidian';
 import type LocationAddPlugin from "../main";
-import type { LocationModalData } from '../utils/ModalHelper';
 
 export class AddLocationModal extends Modal {
     plugin: LocationAddPlugin;
@@ -18,9 +17,6 @@ export class AddLocationModal extends Modal {
     private onSubmit (result: string){
         new Notice(`You searched for: ${result}!`);
     }
-
-	submitCallback?: (res: LocationModalData) => void;
-	closeCallback?: (err?: Error) => void;
     
     constructor(plugin: LocationAddPlugin) {
         super(plugin.app);
