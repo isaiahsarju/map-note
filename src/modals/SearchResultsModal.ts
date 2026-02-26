@@ -1,16 +1,18 @@
 import type { ButtonComponent } from 'obsidian';
-import { App, Modal, Notice, Setting} from 'obsidian';
+import { App, SuggestModal, Notice, Setting} from 'obsidian';
 import type LocationAddPlugin from "../main";
 import { MapLocation } from '../models/MapLocation';
 
-export class SearchResultsModal extends Modal {
+export class SearchResultsModal extends SuggestModal<MapLocation> {
     plugin: LocationAddPlugin;
 
     searchTerm: string;
     title: string = 'Location Results';
-
-    private onSubmit (result: string){
-        new Notice(`You selected: ${result}!`);
+    
+    constructor(app: App, searchTerm: string) {
+        super(app);
+        this.setTitle(this.title);
+        this.searchTerm = searchTerm;
     }
 
     private async searchNominatimFreeform(searchTerm: string): Promise<any> {
@@ -30,48 +32,25 @@ export class SearchResultsModal extends Modal {
             return null;
         }
     }
-    
-    constructor(app: App, searchTerm: string) {
-        super(app);
-        this.setTitle(this.title);
-        this.searchTerm = searchTerm;
-        this.preview(this.searchTerm);
+
+    // Returns all available suggestions.
+    async getSuggestions(): Promise<MapLocation[]> {
+        let mapLocations: MapLocation[] = await this.searchNominatimFreeform(this.searchTerm) as MapLocation[];
+        return mapLocations.filter((mapLocation) =>
+            mapLocation.name?.toLowerCase()
+        );
     }
 
-    async preview(searchTerm: string): Promise<void>{
-        //let {contentEl} = this;
-        let locations = await this.searchNominatimFreeform(this.searchTerm);
-        console.log(locations);
-
-        try{
-            // validate there are 1 or more locations in array
-            let mapLocationData: MapLocation = {lat:"", lon:"", lucide_icon:"landmark"};
-
-            if (locations != null && locations.length > 0) {
-                let mapLocationData = locations[0] as MapLocation;
-                mapLocationData.lucide_icon = "landmark";
-                console.log(mapLocationData);
-            } else {
-                throw new Error('Location array of size zero');
-            }
-
-            const mapLocation = this.containerEl.createEl('div', { cls: 'maplocation' });
-            mapLocation.createEl('div', {text: ((mapLocationData.name != undefined && mapLocationData.name?.length > 0) ? mapLocationData.name : mapLocationData.display_name), cls: 'maplocation__name'});
-            mapLocation.createEl('div', {text: mapLocationData.display_name, cls: 'maplocation__display_name'});
-            mapLocation.createEl('small', {text: mapLocationData.type, cls: 'maplocation__type'});
-        } catch(error) {
-            console.warn('No valid results returned', error);
-            new Notice('No results returned');
-        }
+    // Renders each suggestion item.
+    renderSuggestion(mapLocation: MapLocation, el: HTMLElement) {
+        const mapLocationDiv = el.createEl('div', { cls: 'maplocation' });
+        mapLocationDiv.createEl('div', {text: ((mapLocation.name != undefined && mapLocation.name?.length > 0) ? mapLocation.name : mapLocation.display_name), cls: 'maplocation__name'});
+        mapLocationDiv.createEl('div', {text: mapLocation.display_name, cls: 'maplocation__display_name'});
+        mapLocationDiv.createEl('small', {text: mapLocation.type, cls: 'maplocation__type'});
     }
 
-    onOpen() {
-        let {contentEl} = this;
-        //this.preview(this.searchTerm);
-    }
-
-    onClose() {
-        const {contentEl} = this;
-        contentEl.empty();
+    // Perform action on the selected suggestion.
+    onChooseSuggestion(mapLocation: MapLocation, evt: MouseEvent | KeyboardEvent) {
+        new Notice(`Selected ${mapLocation.name != undefined && mapLocation.name?.length > 0 ? mapLocation.name : mapLocation.display_name}`);
     }
 }
