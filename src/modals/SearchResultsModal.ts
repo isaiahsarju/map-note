@@ -2,28 +2,33 @@ import type { ButtonComponent, ISuggestOwner } from 'obsidian';
 import { App, SuggestModal, Modal, Notice, Setting} from 'obsidian';
 import type LocationAddPlugin from "../main";
 import { MapLocation } from '../models/MapLocation';
+import { RuntimeSettings } from 'models/RuntimeSettings';
 
 export class SearchResultsModal extends SuggestModal<MapLocation> {
     plugin: LocationAddPlugin;
-    private initialQuery: string = ' ';
+    private initialQuery: string;
     
     constructor(
         app: App,
         private readonly suggestion: MapLocation[],
-        private onChoose: (error: Error | null, result: MapLocation) => void){
+        private onChoose: (error: Error | null, result: MapLocation) => void,
+        private rtSettings: RuntimeSettings){
         super(app);
+        this.initialQuery = rtSettings.queryText ? rtSettings.queryText : ' ';
     }
 
     // Returns all available mapLocations.
     getSuggestions(query: string): MapLocation[] {
         return this.suggestion.filter(mapLocation => {
-            const searchQuery = query?.toLowerCase();
-            return (
-                mapLocation.name?.toLowerCase().includes(searchQuery) ||
-                mapLocation.display_name?.toLowerCase().includes(searchQuery) ||
-                mapLocation.type?.toLowerCase().includes(searchQuery));
-            });
-        }
+            const searchQuery: string = query?.toLowerCase();
+            const eachWord: string[] = searchQuery.split(/,| /);
+            return(
+                eachWord.every(word => mapLocation.display_name?.toLowerCase().includes(word)) ||
+                eachWord.some(word => mapLocation.type?.toLowerCase().includes(word))||
+                eachWord.some(word => mapLocation.name?.toLowerCase().includes(word))
+            )
+        });
+    }
 
     // Renders each suggestion item.
     renderSuggestion(mapLocation: MapLocation, el: HTMLElement): void {
@@ -45,7 +50,6 @@ export class SearchResultsModal extends SuggestModal<MapLocation> {
         // to get it to display all options until text is input into the suggest modal
         if (this.initialQuery) {
             this.inputEl.value = this.initialQuery;
-            //this.inputEl.value = this.plugin.settings.templatePath;
             this.inputEl.dispatchEvent(new InputEvent("input"));
         }
     }

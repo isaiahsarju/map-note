@@ -4,6 +4,7 @@ import { SearchLocationModal } from 'modals/SearchLocationModal';
 import { SearchResultsModal } from 'modals/SearchResultsModal';
 import { AddCurrentLocationModal } from 'modals/AddCurrentLocationModal';
 import { MapLocation } from 'models/MapLocation';
+import { RuntimeSettings } from 'models/RuntimeSettings';
 
 
 // Remember to rename these classes and interfaces!
@@ -53,25 +54,26 @@ export default class LocationAddPlugin extends Plugin {
 	
 	// To-do: add insertMetadata like function from https://github.com/anpigon/obsidian-book-search-plugin/blob/master/src/main.ts#L141
 
-	async openSearchLocationModal(query = ''): Promise<MapLocation[]>{
+	async openSearchLocationModal(rtSettings: RuntimeSettings): Promise<MapLocation[]>{
 		return new Promise((resolve, reject) => {
-			return new SearchLocationModal(this.app, query, (error, results) => {
+			return new SearchLocationModal(this.app, rtSettings, (error, results) => {
 				return error ? reject(error) : resolve(results);
 			}).open();
 		});
 	}
 
-	async openSearchResultsModal(mapLocations: MapLocation[]): Promise<MapLocation>{
+	async openSearchResultsModal(mapLocations: MapLocation[], rtSettings: RuntimeSettings): Promise<MapLocation>{
 		return new Promise((resolve, reject) => {
 			return new SearchResultsModal(this.app, mapLocations, (error, result) => {
 				return error ? reject(error) : resolve(result);
-			}).open();
+			}, rtSettings).open();
 		});
 	}
 
 	async selectCorrectLocation(query?: string): Promise<MapLocation>{
-		const mapLocations = await this.openSearchLocationModal(query);
-		return await this.openSearchResultsModal(mapLocations);
+		let rtSettings: RuntimeSettings = {queryText: query ? query : ''};
+		const mapLocations = await this.openSearchLocationModal(rtSettings);
+		return await this.openSearchResultsModal(mapLocations, rtSettings);
 	}
 	async createNewLocationNote(): Promise<void>{
 		const mapLocation = await this.selectCorrectLocation();

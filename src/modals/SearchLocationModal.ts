@@ -2,6 +2,7 @@ import type { ButtonComponent } from 'obsidian';
 import { App, Modal, Notice, Setting} from 'obsidian';
 import LocationAddPlugin from "../main";
 import { MapLocation } from 'models/MapLocation';
+import { RuntimeSettings } from 'models/RuntimeSettings';
 
 export class SearchLocationModal extends Modal {
     plugin: LocationAddPlugin;
@@ -10,13 +11,17 @@ export class SearchLocationModal extends Modal {
     private readonly SEARCHING_BUTTON_TEXT: string = 'Searching...';
     private isBusy = false;
     private okBtnRef?: ButtonComponent;
+    private query?: string;
+    private rtSettings: RuntimeSettings;
     
     constructor(
         app: App,
-        private query: string,
+        rtSettings: RuntimeSettings,
         private callback: (error: Error | null, result: MapLocation[]) => void,
         ) {
         super(app);
+        this.rtSettings = rtSettings;
+        this.query = this.rtSettings.queryText;
     }
 
     // Search API for locations
@@ -72,6 +77,7 @@ export class SearchLocationModal extends Modal {
                 .setPlaceholder("e.g. Cloud Gate Chicago")
                 .onChange((value) => {
                 this.query = value;
+                this.rtSettings.queryText = this.query;
                 })
                 .inputEl.addEventListener('keydown', event => event.key === 'Enter' && !event.isComposing && this.getLocations()));
 
