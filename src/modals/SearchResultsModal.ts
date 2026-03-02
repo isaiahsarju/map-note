@@ -41,6 +41,7 @@ export class SearchResultsModal extends SuggestModal<MapLocation> {
     // Perform action on the selected suggestion.
     onChooseSuggestion(mapLocation: MapLocation, evt: Event): void {
         new Notice(`Selected ${mapLocation.name != undefined && mapLocation.name?.length > 0 ? mapLocation.name : mapLocation.display_name}`);
+        this.onChoose(null, mapLocation);
     }
 
 

@@ -1,10 +1,11 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin } from 'obsidian';
+import { App, Notice, Plugin, normalizePath, TFile} from 'obsidian';
 import { DEFAULT_SETTINGS, LocationAddSettings, LocationAddTab } from './settings/settings';
 import { SearchLocationModal } from 'modals/SearchLocationModal';
 import { SearchResultsModal } from 'modals/SearchResultsModal';
 import { AddCurrentLocationModal } from 'modals/AddCurrentLocationModal';
 import { MapLocation } from 'models/MapLocation';
 import { RuntimeSettings } from 'models/RuntimeSettings';
+import { replacePlaceHolders } from 'utils/utils'
 
 
 // Remember to rename these classes and interfaces!
@@ -35,10 +36,6 @@ export default class LocationAddPlugin extends Plugin {
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new LocationAddTab(this.app, this));
-
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
-
 	}
 
 	onunload() {
@@ -75,7 +72,43 @@ export default class LocationAddPlugin extends Plugin {
 		const mapLocations = await this.openSearchLocationModal(rtSettings);
 		return await this.openSearchResultsModal(mapLocations, rtSettings);
 	}
+
 	async createNewLocationNote(): Promise<void>{
-		const mapLocation = await this.selectCorrectLocation();
+		let vault = this.app.vault;
+		try {
+			// Get correct Locaiton
+			const mapLocation = await this.selectCorrectLocation();
+			console.log(`Selected name: ${mapLocation.name}\ndisplay_name: ${mapLocation.display_name}\ntype: ${mapLocation.type}`);
+			console.debug(mapLocation);
+
+			// Make new note from location
+			const fileName = (mapLocation.name ? mapLocation.name : mapLocation.display_name) + '.md';
+			const templatePath = normalizePath(this.settings.templatePath) + '.md';
+			console.log(templatePath);
+			const templateFile = vault.getFileByPath(templatePath);
+			let fileContents = '';
+			console.log(templateFile);
+			if (templateFile) {
+				const fileTemplateText = await vault.read(templateFile);
+				fileContents = replacePlaceHolders(mapLocation, fileTemplateText);
+			} else {
+				throw new Error(`Template file not found: ${templatePath}`)
+			}
+			const targetFile = await this.app.vault.create(fileName, fileContents);
+			
+			// open file
+			const activeLeaf = this.app.workspace.getLeaf();
+			if (!activeLeaf) {
+				console.warn('No active leaf');
+				return;
+			}
+
+			await activeLeaf.openFile(targetFile, { state: { mode: 'source' } });
+			activeLeaf.setEphemeralState({ rename: 'all' });
+
+		} catch (error){
+			console.warn(error);
+			new Notice(`${error}`);
+		}
 	}
 };

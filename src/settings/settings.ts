@@ -22,6 +22,7 @@ export class LocationAddTab extends PluginSettingTab {
 
 		containerEl.empty();
 		
+		// To-Do make this a searchable drop down
 		new Setting(containerEl)
 			.setName('Path to template file')
 			.setDesc('See README docs for example template file')
