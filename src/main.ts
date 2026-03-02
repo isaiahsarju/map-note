@@ -84,10 +84,8 @@ export default class LocationAddPlugin extends Plugin {
 			// Make new note from location
 			const fileName = (mapLocation.name ? mapLocation.name : mapLocation.display_name) + '.md';
 			const templatePath = normalizePath(this.settings.templatePath) + '.md';
-			console.log(templatePath);
 			const templateFile = vault.getFileByPath(templatePath);
 			let fileContents = '';
-			console.log(templateFile);
 			if (templateFile) {
 				const fileTemplateText = await vault.read(templateFile);
 				fileContents = replacePlaceHolders(mapLocation, fileTemplateText);
