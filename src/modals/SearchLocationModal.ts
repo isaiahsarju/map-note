@@ -3,6 +3,7 @@ import { App, Modal, Notice, Setting} from 'obsidian';
 import LocationAddPlugin from "../main";
 import { MapLocation } from 'models/MapLocation';
 import { RuntimeSettings } from 'models/RuntimeSettings';
+import { assert } from 'console';
 
 export class SearchLocationModal extends Modal {
     plugin: LocationAddPlugin;

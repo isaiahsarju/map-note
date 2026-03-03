@@ -86,6 +86,17 @@ export default class LocationAddPlugin extends Plugin {
 			const templatePath = normalizePath(this.settings.templatePath) + '.md';
 			const templateFile = vault.getFileByPath(templatePath);
 			let fileContents = '';
+
+			// Set icons and colors inside of mapLocation
+            const icaDict = this.settings.icaDict;
+			const mapLocationType = mapLocation.type;
+            if (icaDict !== undefined && mapLocationType !== undefined){
+				const icaIcon = icaDict[mapLocationType]?.icon;
+				const icaColor = icaDict[mapLocationType]?.color;
+				if (icaIcon) mapLocation.lucide_icon = icaIcon;
+				if (icaColor) mapLocation.color = icaColor;
+            }
+
 			if (templateFile) {
 				const fileTemplateText = await vault.read(templateFile);
 				fileContents = replacePlaceHolders(mapLocation, fileTemplateText);

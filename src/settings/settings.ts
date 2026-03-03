@@ -137,7 +137,6 @@ export class LocationAddTab extends PluginSettingTab {
 				}
 				// To-Do add backup toggle to search lucide and pick first item from searched array
 				settings.icaDict[this.strType]= {'color':this.strColor, 'icon':this.strIcon};
-				console.log(settings.icaDict);
 				this.strColor = undefined;
 				this.strIcon = undefined;
 				await this.plugin.saveSettings();
@@ -176,7 +175,6 @@ export class LocationAddTab extends PluginSettingTab {
 				.setTooltip('Delete')
 				.onClick( async () =>{
 					delete settings.icaDict[K];
-					console.log(settings.icaDict);
 					await this.plugin.saveSettings();
 					this.display();
 				});
