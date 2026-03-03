@@ -1,11 +1,14 @@
 {
 	"id": "map-location",
 	"name": "Map Location",
-	"version": "0.1.1",
-	"minAppVersion": "0.15.0",
-	"description": "Creates notes that can be displayed by the Obsidian Map API plugin",
+	"version": "0.1.3",
+	"minAppVersion": "1.10.0",
+	"description": "Create a note that can be displayed using the Obsidian Bases Map View",
 	"author": "Isaiah Sarju",
 	"authorUrl": "https://github.com/isaiahsarju/",
-	"fundingUrl": "https://buymeacoffee.com/isaiahsarju",
+	"fundingUrl": {
+			"Buy Me a Coffee": "https://buymeacoffee.com/isaiahsarju",
+			"GitHub Sponsor": "https://github.com/sponsors/isaiahsarju/"
+		},
 	"isDesktopOnly": false
 }
