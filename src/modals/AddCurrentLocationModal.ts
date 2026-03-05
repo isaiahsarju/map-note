@@ -2,6 +2,10 @@ import type { ButtonComponent } from 'obsidian';
 import { App, Modal, Notice, Setting, TextComponent} from 'obsidian';
 import type LocationAddPlugin from "../main";
 
+/**
+ * A Modal used to add current location based on users GPS coordinates
+ * NOT YET IMPLEMENTED
+ */
 export class AddCurrentLocationModal extends Modal {
 	plugin: LocationAddPlugin;
     
@@ -15,6 +19,9 @@ export class AddCurrentLocationModal extends Modal {
         super(app);
     }
 
+	/**
+	 * @inheritdoc {Modal.onOpen}
+	 */
 	onOpen() {
 		// Maybe gets GPS and then peforms OSM search to try and resolve an addr?
 		let {contentEl} = this;
@@ -22,6 +29,9 @@ export class AddCurrentLocationModal extends Modal {
         this.close();
 	}
 
+	/**
+	 * @inheritdoc {Modal.onClose}
+	 */
 	onClose() {
 		const {contentEl} = this;
 		contentEl.empty();

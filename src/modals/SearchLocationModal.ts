@@ -38,12 +38,13 @@ export class SearchLocationModal extends Modal {
 
     /**
      * 
-     * @param {string} searchText - Freeform Nominatim API style query string
+     * @param {string} searchText - Freeform Nominatim API freeform style query string
      * @returns {Promise<any[]>} Promise of an Array of OSM locations
      */
     private async searchNominatimFreeform(searchText: string): Promise<any[]> {
         const url = "https://nominatim.openstreetmap.org/search?q=" + encodeURIComponent(searchText) + "&format=json";
-
+        
+        // Peform Freeform search
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -53,6 +54,7 @@ export class SearchLocationModal extends Modal {
             const results: Array<any> = await response.json() as Array<any>;
             return results;
         }
+        // Catch errors
         catch (error) {
             const emptyArray: Array<any> = new Array;
             console.warn('Failed to get results of search', error);
@@ -71,12 +73,17 @@ export class SearchLocationModal extends Modal {
         this.searchBtnRef?.setDisabled(busy).setButtonText(busy ? this.SEARCHING_BUTTON_TEXT : this.SEARCH_BUTTON_TEXT);
     }
 
-    // Returns all available suggestions.
+    /**
+     * Get map locations and set mapLocations for return with callback function
+     */
     private async getLocations(): Promise<void> {
+        // Must enter a query
         if (!this.query) return void new Notice('No query entered.');
         new Notice(`You searched for '${this.query}'`);
         if (this.isBusy) return;
 
+        // Get and set mapLocations from searchNominatim search
+        // mapLocations is not returned directly but as a part of the callback function
         let  mapLocations: MapLocation[] = [];
         this.setBusy(true);
         try {
@@ -90,9 +97,13 @@ export class SearchLocationModal extends Modal {
             this.close();
         }
     }
-
+    
+    /**
+     * @inheritdoc {Modal.onOpen}
+     */
     onOpen() {
         let {contentEl} = this;
+        // Search box
         new Setting(this.contentEl)
             .setName('Search')
             .addText((text) =>
@@ -103,7 +114,7 @@ export class SearchLocationModal extends Modal {
                 this.rtSettings.queryText = this.query;
                 })
                 .inputEl.addEventListener('keydown', event => event.key === 'Enter' && !event.isComposing && this.getLocations()));
-
+        // Search button
         new Setting(this.contentEl).addButton(btn => {
             this.searchBtnRef = btn
                 .setButtonText(this.SEARCH_BUTTON_TEXT)
@@ -112,6 +123,9 @@ export class SearchLocationModal extends Modal {
             });
     }
 
+    /**
+     * @inheritdoc {Modal.onClose}
+     */
     onClose() {
         let {contentEl} = this;
         contentEl.empty();
