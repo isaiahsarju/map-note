@@ -1,3 +1,6 @@
+/**
+ * An interface describing our MapLocation, all OSM fields and then additional ones like lucide_icon and color
+ */
 export interface MapLocation {
     addresstype?: string;
     boundingbox?: string[];
