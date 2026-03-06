@@ -73,9 +73,6 @@ Your template can have the following properties set. Bare minimum you need `coor
 # To Do
 - [ ] https://fevol.github.io/obsidian-notes/notes/tutorials/showcase-plugin-and-theme-downloads/
 - [ ] Add the thing to readme to instruct folks how to update it
-- [ ] Open issues for todos
-- [ ] Create blank note if file doesn't exist
-- [ ] https://docs.obsidian.md/Plugins/Releasing/Release+your+plugin+with+GitHub+Actions
 # Disclosures
 ## Network Access
 Uses [Nominatim web API](https://nominatim.org/release-docs/develop/api/Overview/) for accessing [OpenStreetMaps](https://www.openstreetmap.org/about) Data.
