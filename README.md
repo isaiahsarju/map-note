@@ -74,7 +74,6 @@ Your template can have the following properties set. Bare minimum you need `coor
 | color       | `string`   | A valid CSS value: hex, RGB, named color |
 # To Do
 - [ ] https://fevol.github.io/obsidian-notes/notes/tutorials/showcase-plugin-and-theme-downloads/
-- [ ] Add the thing to readme to instruct folks how to update it
 # Disclosures
 ## Network Access
 Uses [Nominatim web API](https://nominatim.org/release-docs/develop/api/Overview/) for accessing [OpenStreetMaps](https://www.openstreetmap.org/about) Data.
