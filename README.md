@@ -2,7 +2,7 @@
 ![GitHub Downloads (specific asset, all releases)](https://img.shields.io/github/downloads/isaiahsarju/map-note/main.js?label=Downloads:&logo=obsidian&color=8c79de&logoColor=8c79de)
 
 
-Requires [Obsidian 1.10](https://obsidian.md/changelog/2025-11-11-desktop-v1.10.3/). This project creates notes with the necessary properties to be rendered by the the [Obsidian Bases Map view](https://github.com/obsidianmd/obsidian-maps).
+Requires [Obsidian 1.10](https://obsidian.md/changelog/2025-11-11-desktop-v1.10.3/). Creates notes with the necessary properties to be rendered by the [Obsidian Bases Map view](https://github.com/obsidianmd/obsidian-maps).
 # Install
 Use [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin while this is in beta.
 # Example Templates
