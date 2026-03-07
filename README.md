@@ -1,6 +1,5 @@
 [![Node.js build](https://github.com/isaiahsarju/map-note/actions/workflows/lint.yml/badge.svg)](https://github.com/isaiahsarju/map-note/actions/workflows/lint.yml)
 ![GitHub Downloads (specific asset, all releases)](https://img.shields.io/github/downloads/isaiahsarju/map-note/main.js?label=Downloads:&logo=obsidian&color=8c79de&logoColor=8c79de)
-[![Obsidian](https://img.shields.io/badge/Obsidian-%23483699.svg?&logo=obsidian&color=8c79de&logoColor=8c79de)](#)
 
 
 Requires [Obsidian 1.10](https://obsidian.md/changelog/2025-11-11-desktop-v1.10.3/). This project creates notes with the necessary properties to be rendered by the the [Obsidian Bases Map view](https://github.com/obsidianmd/obsidian-maps).
@@ -75,8 +74,7 @@ Your template can have the following properties set. Bare minimum you need `coor
 | ----------- | ---------- | ---------------------------------------- |
 | lucide_icon | `string`   | Icon that shows up on the map            |
 | color       | `string`   | A valid CSS value: hex, RGB, named color |
-# To Do
-- [ ] https://fevol.github.io/obsidian-notes/notes/tutorials/showcase-plugin-and-theme-downloads/
+
 # Disclosures
 ## Network Access
 Uses [Nominatim web API](https://nominatim.org/release-docs/develop/api/Overview/) for accessing [OpenStreetMaps](https://www.openstreetmap.org/about) Data.
