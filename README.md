@@ -50,7 +50,7 @@ tags:
 ## Data and Types
 The OSM and plugin generated data is available for insertion into the template.
 ### OSM Generated JSON Data and Types
-Your template can have the following properties set. Bare minimum you need `coordinates`. You can use the following keys as `{{key}}` in your template file. `lat` and `lon` are required in the whatever field maps to the Bases Map view `coordinates`. See the official Obsidian Bases Map view guidance [here](https://help.obsidian.md/bases/views/map)
+Your template can have the following properties set. Bare minimum you need `coordinates`. You can use the following keys as `{{key}}` in your template file. `lat` and `lon` are required in the whatever field maps to the Bases Map view `coordinates`. See the official Obsidian Bases Map view guidance [here](https://help.obsidian.md/bases/views/map).
 
 | key          | value type | importance                                  |
 | ------------ | ---------- | ------------------------------------------- |
@@ -68,7 +68,9 @@ Your template can have the following properties set. Bare minimum you need `coor
 | place_id     | `number`   |                                             |
 | place_rank   | `number`   |                                             |
 | type         | `string`   | Used for icon resolution                    |
+
 ### Plugin Generated JSON Data and Types
+Icons are rendered using [lucide.dev](https://lucide.dev/icons).
 
 | key         | value type | importance                               |
 | ----------- | ---------- | ---------------------------------------- |
