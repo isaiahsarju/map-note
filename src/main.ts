@@ -122,8 +122,8 @@ export default class LocationAddPlugin extends Plugin {
 			console.debug(mapLocation);
 
 			// Make new note from location
-			const fileName = (mapLocation.name ? mapLocation.name : mapLocation.display_name) + '.md';
-			const templatePath = normalizePath(this.settings.templatePath) + '.md';
+			const fileName = normalizePath((mapLocation.name ? mapLocation.name : mapLocation.display_name) + '.md');
+			const templatePath = normalizePath(this.settings.templatePath + '.md');
 			const templateFile = vault.getFileByPath(templatePath);
 			let fileContents = '';
 
