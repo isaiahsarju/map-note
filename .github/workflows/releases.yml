@@ -4,8 +4,7 @@ on:
   push:
     tags:
       - "*"
-    tags-ignore:
-      - "dev-stable"
+      - "!dev-stable"
 
 jobs:
   build:
