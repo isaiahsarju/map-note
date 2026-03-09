@@ -75,7 +75,16 @@ export function associateIconsColors(mapLocation: MapLocation, icaDict: {[id: st
             console.error("Icon and color undefined. No type, class, or addresstype resolved");
         }
         // If icons/colors are not null and are defined update mapLocation properties, else set themt to empty strings
-        icaIcon && icaIcon !== undefined ? mapLocation.lucide_icon = icaIcon : mapLocation.lucide_icon="";
-        icaColor && icaColor !== undefined ? mapLocation.color = icaColor : mapLocation.color="";
+        if (icaIcon && icaIcon !== undefined) {
+            mapLocation.lucide_icon = icaIcon
+        } else {
+            mapLocation.lucide_icon="";
+        }
+
+        if (icaColor && icaColor !== undefined) {
+            mapLocation.color = icaColor;
+        } else {
+             mapLocation.color="";
+        }
     }
 }

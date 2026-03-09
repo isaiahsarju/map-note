@@ -118,7 +118,7 @@ export default class LocationAddPlugin extends Plugin {
 		try {
 			// Get correct Locaiton
 			const mapLocation = await this.selectCorrectLocation();
-			console.debug("Selected name: " );
+			console.debug("Selected location object: " );
 			console.debug(mapLocation);
 
 			// Make new note from location
