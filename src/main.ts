@@ -1,4 +1,4 @@
-import { Notice, Plugin, Editor, MarkdownView, Workspace, TFile, normalizePath} from 'obsidian';
+import { Notice, Plugin, Editor, MarkdownView, normalizePath} from 'obsidian';
 import { DEFAULT_SETTINGS, LocationAddSettings, LocationAddTab } from './settings/settings';
 import { SearchLocationModal } from 'modals/SearchLocationModal';
 import { SearchResultsModal } from 'modals/SearchResultsModal';
@@ -39,7 +39,7 @@ export default class LocationAddPlugin extends Plugin {
 			id: 'add-location-data',
 			name: 'Add location data to current note',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
-				this.addLocationCurrentNote(editor, view);
+				void this.addLocationCurrentNote(editor, view);
 			},
 		});
 
@@ -190,7 +190,6 @@ export default class LocationAddPlugin extends Plugin {
 				console.debug(mapLocation);
 
 				// Make new note from location
-				const fileName = normalizePath((mapLocation.name ? mapLocation.name : mapLocation.display_name) + '.md');
 				const templatePath = normalizePath(this.settings.templatePath + '.md');
 				const templateFile = vault.getFileByPath(templatePath);
 				let fileContents = '';
