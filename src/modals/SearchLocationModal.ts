@@ -111,7 +111,7 @@ export class SearchLocationModal extends Modal {
         // Search box
         new Setting(this.contentEl)
             .setName('Search')
-            .addText((text) =>
+            .addText((text) => {
                 text
                 .setPlaceholder("Cloud gate chicago")
                 .onChange((value) => {
@@ -126,7 +126,9 @@ export class SearchLocationModal extends Modal {
                             void this.getLocations().catch(console.warn);
                         })();
                     }
-                })
+                });
+                if(this.query){text.setValue(this.query);}
+            }
             )
                 //.inputEl.addEventListener('keydown', event => event.key === 'Enter' && !event.isComposing && this.getLocations()));
         // Search button
