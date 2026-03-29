@@ -1,4 +1,4 @@
-import { Notice, Plugin, normalizePath} from 'obsidian';
+import { Notice, Plugin, Editor, MarkdownView, Workspace, TFile, normalizePath} from 'obsidian';
 import { DEFAULT_SETTINGS, LocationAddSettings, LocationAddTab } from './settings/settings';
 import { SearchLocationModal } from 'modals/SearchLocationModal';
 import { SearchResultsModal } from 'modals/SearchResultsModal';
@@ -33,14 +33,15 @@ export default class LocationAddPlugin extends Plugin {
 			callback: () => this.createNewLocationNote()
 		});
 
-		// Adds location data to a current note, pre-filling search
-		// with the name of the note
-		/*
+		// Adds a new location to current note by calling OSM API,
+		// resolving location data, and filling out a template
 		this.addCommand({
 			id: 'add-location-data',
 			name: 'Add location data to current note',
-			callback: () => this.addLocationData()
-		})*/
+			editorCallback: (editor: Editor, view: MarkdownView) => {
+				this.addLocationCurrentNote(editor, view);
+			},
+		});
 
 		// Adds a location based on the users current GPS coordinates
 		// To-Do: Implement
@@ -50,7 +51,6 @@ export default class LocationAddPlugin extends Plugin {
 			name: 'Add current location',
 			callback: () => this.addCurrentLocation()
 		});*/
-
 
 		// Adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new LocationAddTab(this.app, this));
@@ -115,6 +115,10 @@ export default class LocationAddPlugin extends Plugin {
 		return await this.openSearchResultsModal(mapLocations, rtSettings);
 	}
 
+	/**
+	 * Creates a new location note
+	 * @returns {Promise<void>}
+	 */
 	async createNewLocationNote(): Promise<void>{
 		let vault = this.app.vault;
 		try {
@@ -155,6 +159,63 @@ export default class LocationAddPlugin extends Plugin {
 
 			await activeLeaf.openFile(targetFile, { state: { mode: 'source' } });
 			activeLeaf.setEphemeralState({ rename: 'all' });
+		} catch (error){
+			// https://www.youtube.com/watch?v=JuYeHPFR3f0
+			console.warn(error);
+			new Notice(`${error as string}`);
+		}
+	}
+
+	/**
+	 * Adds Location Data to Current Note
+	 * @param {Editor} editor - Editor Object
+	 * @param {MarkdownView} view - MarkdownView Oject
+	 * @returns {Promise<void>}
+	 */
+	async addLocationCurrentNote(editor: Editor, view: MarkdownView ): Promise<void>{
+		let vault = this.app.vault;
+		try {
+			// Make sure the user is editing a Markdown file.
+			if (view) {
+				// Set cursor to start of doc
+				view.editor.setCursor(0,0);
+				const cursor = view.editor.getCursor();
+
+				//Get current file name without 'md's
+				const currentFile = view.file?.name.replace(/\.[^/.]+$/, "")
+		
+				// Get correct Locaiton
+				const mapLocation = await this.selectCorrectLocation(currentFile);
+				console.debug("Selected location object: " );
+				console.debug(mapLocation);
+
+				// Make new note from location
+				const fileName = normalizePath((mapLocation.name ? mapLocation.name : mapLocation.display_name) + '.md');
+				const templatePath = normalizePath(this.settings.templatePath + '.md');
+				const templateFile = vault.getFileByPath(templatePath);
+				let fileContents = '';
+
+				// Set Icon and Color properties of MapLocation object
+				associateIconsColors( mapLocation, this.settings.icaDict);
+
+				// To-Do, add setting for looking up lucide icons based on type and selecting
+				// the first one
+				
+				// Only create a new file if template is defined
+				if (templateFile) {
+					// Read and fill out templated text
+					const fileTemplateText = await vault.read(templateFile);
+					fileContents = replacePlaceHolders(mapLocation, fileTemplateText);
+				} else {
+					// If no template file found: throw an error
+					throw new Error(`Template file not found: ${templatePath}`)
+				}
+				
+				// Add templated text
+				// append new line first
+				fileContents += '\n';
+				editor.replaceRange(fileContents,cursor);
+			}
 		} catch (error){
 			// https://www.youtube.com/watch?v=JuYeHPFR3f0
 			console.warn(error);
